@@ -50,6 +50,30 @@ class Booking(webdriver.Chrome):
         )
         check_out_date.click()
 
+    def select_adult(self, count):
+        toggle = self.find_element(By.ID, "xp__guests__toggle")
+        toggle.click()
+        decrease_button = self.find_element(
+            By.CSS_SELECTOR, 
+            "button[aria-label='Decrease number of Adults']"
+        )
+        increase_button = self.find_element(
+            By.CSS_SELECTOR,
+            "button[aria-label='Increase number of Adults']"
+        )
+        group_adults = self.find_element(
+            By.ID, "group_adults"
+        )
+        while True:
+            value = group_adults.get_attribute("value")
+            if int(value) == 1:
+                break
+            decrease_button.click()
+        
+        for _ in range(count-1):
+            increase_button.click()
+
+
     def search(self):
         search_button = self.find_element(
             By.CLASS_NAME,
