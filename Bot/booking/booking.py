@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from booking.booking_filtration import BookingFiltration
 import booking.constants as const
+from selenium.webdriver.remote.webelement import WebElement
 
 class Booking(webdriver.Chrome):
     def __init__(self, driver_path="", teardown=False):
@@ -8,6 +10,7 @@ class Booking(webdriver.Chrome):
         self.teardown = teardown
         super(Booking, self).__init__()
         self.implicitly_wait(15)
+        self.maximize_window()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.teardown:
@@ -80,3 +83,12 @@ class Booking(webdriver.Chrome):
             "js-sb-submit-text"    
         )
         search_button.click()
+
+    def apply_filtration(self):
+        filtration = BookingFiltration(driver=self)
+        filtration.apply_star_ratings(3, 4, 5)
+
+        filtration.sort_price_lowest_first()
+
+    def report_results(self):
+        
